@@ -1,40 +1,90 @@
-import React from 'react'
-import HamMenu from '../Assets/Images/hamMenu.jpg'
-import Logo from '../Assets/Images/Logobutton.png'
-import User from '../Assets/Images/UserImage.png'
-import SeacrhButton from '../Assets/Images/Search-icon.png'
-import { toggleMenu } from '../Utils/appSlice'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from "react";
+import HamMenu from "../Assets/Images/hamMenu.jpg";
+import Logo from "../Assets/Images/Logobutton.png";
+import User from "../Assets/Images/UserImage.png";
+import SeacrhButton from "../Assets/Images/Search-icon.png";
+import { toggleMenu } from "../Utils/appSlice";
+import { useDispatch } from "react-redux";
+import { Youtube_Search_API } from "../Utils/constants";
 
 const Head = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [suggestions, setSuggestions] = useState([]);
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const dispatch = useDispatch();
-
-
-  const toggleMenuHandler = () =>{
+  const toggleMenuHandler = () => {
     dispatch(toggleMenu());
-  }
+  };
 
+  useEffect(() => {
+    const timer = setTimeout(() => getSearchSuggestions(), 200);
 
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
+  const getSearchSuggestions = async () => {
+    console.log("API Call - " + searchQuery);
+    const data = await fetch(Youtube_Search_API + searchQuery);
+    const json = await data.json();
+    setSuggestions(json[1]);
+  };
 
   return (
-    <div className='grid grid-flow-col p-4 m-2 shadow-lg'>
-        <div className='flex col-span-1 '>
-            <img onClick={() => toggleMenuHandler()} src={HamMenu} alt="Menu-Dropdown" className='w-8 h-8 cursor-pointer' />
+    <div className="grid grid-flow-col p-4 m-2 shadow-lg">
+      <div className="flex col-span-1 ">
+        <img
+          onClick={() => toggleMenuHandler()}
+          src={HamMenu}
+          alt="Menu-Dropdown"
+          className="w-8 h-8 cursor-pointer"
+        />
 
-            <a href='/'><img src={Logo} alt="Youtube-logo" className='w-24 h-8 mx-2' /></a>
+        <a href="/">
+          <img src={Logo} alt="Youtube-logo" className="w-24 h-8 mx-2" />
+        </a>
+      </div>
+      <div className="col-span-10">
+        <div>
+          <input
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setShowSuggestions(false)}
+            className="w-1/2 border border-gray-400 p-2 rounded-l-full"
+            type="text"
+            placeholder="Search"
+          />
+          <button className="border border-gray-600 p-2 rounded-r-full">
+            🔍
+          </button>
         </div>
-        <div className='col-span-10'>
-            <input className='w-1/2 border border-gray-400 p-2 rounded-l-full' type="text" placeholder='Search'/>
-            <button className='border border-gray-600 p-2 rounded-r-full'>🔍</button>
-        </div>
-      
-        <div className='col-span-1'>
-            <img src={User} alt="User-button" className='w-8 h-8' />
-        </div>
-        
+        {showSuggestions && (
+          <div className="absolute px-5 py-2 bg-white w-[37rem] shadow-lg rounded-lg border border-gray-500  ">
+            <ul>
+              {suggestions.map((s) => {
+                return (
+                  <li key={s} className="hover:bg-gray-500">
+                    🔍 {s}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="col-span-1">
+        <img src={User} alt="User-button" className="w-8 h-8" />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Head
+export default Head;
