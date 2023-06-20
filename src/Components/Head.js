@@ -4,8 +4,9 @@ import Logo from "../Assets/Images/Logobutton.png";
 import User from "../Assets/Images/UserImage.png";
 import SeacrhButton from "../Assets/Images/Search-icon.png";
 import { toggleMenu } from "../Utils/appSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Youtube_Search_API } from "../Utils/constants";
+import { cacheResults } from "../Utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,13 +15,22 @@ const Head = () => {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  const searchCache = useSelector((store) => store.search);
+
   const dispatch = useDispatch();
+
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => getSearchSuggestions(), 200);
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestions();
+      }
+    }, 200);
 
     return () => {
       clearTimeout(timer);
@@ -32,6 +42,11 @@ const Head = () => {
     const data = await fetch(Youtube_Search_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
+    dispatch(
+      cacheResults({
+        [searchQuery]: json[1],
+      })
+    );
   };
 
   return (
