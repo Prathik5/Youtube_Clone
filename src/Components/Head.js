@@ -7,6 +7,8 @@ import { toggleMenu } from "../Utils/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Youtube_Search_API } from "../Utils/constants";
 import { cacheResults } from "../Utils/searchSlice";
+import { Link } from "react-router-dom";
+import SearchVideoContainer from "./SearchVideoContainer";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +20,10 @@ const Head = () => {
   const searchCache = useSelector((store) => store.search);
 
   const dispatch = useDispatch();
+
+  const handleClick = (i) => {
+    <SearchVideoContainer query={i} />;
+  };
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
@@ -52,18 +58,19 @@ const Head = () => {
   return (
     <div className="grid grid-flow-col p-4 m-2 shadow-lg">
       <div className="flex col-span-1 ">
+        {/* //This is the hamburger menu icon's logic */}
         <img
           onClick={() => toggleMenuHandler()}
           src={HamMenu}
           alt="Menu-Dropdown"
           className="w-8 h-8 cursor-pointer"
         />
-
         <a href="/">
           <img src={Logo} alt="Youtube-logo" className="w-24 h-8 mx-2" />
         </a>
       </div>
       <div className="col-span-10">
+        {/* //The search bar logic */}
         <div>
           <input
             value={searchQuery}
@@ -85,7 +92,13 @@ const Head = () => {
             <ul>
               {suggestions.map((s) => {
                 return (
-                  <li key={s} className="hover:bg-gray-500">
+                  <li
+                    onClick={() => {
+                      <SearchVideoContainer query={s} />;
+                    }}
+                    key={s}
+                    className="hover:bg-gray-500"
+                  >
                     🔍 {s}
                   </li>
                 );
@@ -96,6 +109,7 @@ const Head = () => {
       </div>
 
       <div className="col-span-1">
+        {/* //This is the user image displayed */}
         <img src={User} alt="User-button" className="w-8 h-8" />
       </div>
     </div>

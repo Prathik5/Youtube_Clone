@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Comment from "./Comment";
+import { COMMENTS_API } from "../Utils/constants";
 
 const commentData = [
   {
