@@ -83,7 +83,10 @@ const Head = () => {
             type="text"
             placeholder="Search"
           />
-          <button className="border border-gray-600 p-2 rounded-r-full">
+          <button
+            onClick={handleClick}
+            className="border border-gray-600 p-2 rounded-r-full"
+          >
             🔍
           </button>
         </div>

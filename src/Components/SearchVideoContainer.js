@@ -24,7 +24,7 @@ const SearchVideoContainer = ({ query }) => {
   return (
     <div>
       {searchRes.map((search) => (
-        <Link to={"/watch?+v=" + searchRes.id}>
+        <Link to={"/watch?v=" + searchRes.id}>
           <SearchResults info={search} />
         </Link>
       ))}

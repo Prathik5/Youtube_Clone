@@ -53,11 +53,11 @@ const LiveChat = () => {
           );
           setLiveMessage("");
         }}
-        className=" p-2 ml-2 w-full border border-black"
+        className=" p-2 ml-2 w-full border "
       >
-        Live Chat:
+        <span className="px-1">Live Chat:</span>
         <input
-          className=" bg-black w-80 text-white px-2"
+          className="w-80 px-2"
           type="text"
           placeholder="Enter message:"
           value={liveMessage}
@@ -65,7 +65,7 @@ const LiveChat = () => {
             setLiveMessage(e.target.value);
           }}
         />
-        <button className="bg-green-100 p-1 mx-2">Send</button>
+        <button className="bg-red-500 w-11 mx-2">Send</button>
       </form>
     </>
   );

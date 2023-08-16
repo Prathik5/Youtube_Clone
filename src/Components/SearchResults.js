@@ -11,9 +11,9 @@ const SearchResults = ({ info }) => {
           <img className="w-96 h-64" src={thumbnails.high.url} alt={title} />
         </div>
         <div>
-          <div className="font-bold">{title}</div>
-          <div className="">{channelTitle}</div>
-          <div className="font-light">{description}</div>
+          <div className="font-bold p-2">{title}</div>
+          <div className="p-2">{channelTitle}</div>
+          <div className="font-light p-2">{description}</div>
         </div>
         <hr />
       </div>
